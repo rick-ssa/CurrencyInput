@@ -12,26 +12,36 @@ interface IPropsCurrencyInput {
     numero:number,
     onChange:any,
     label?:string,
-    moeda?:string,
+    symbolStart?:string,
+    symbolEnd?:string,
     fullWidth?:boolean,
     autoFocus?:boolean,
     disabled?:boolean,
     inputRef?:React.Ref<any>,
+    maxValue?:number,
     color?: "primary" | "secondary",
     variant?: "filled" | "outlined" | "standard",
+    onOverFlow?:any,
+    helperText?:React.ReactNode,
+    error?: boolean,
 }
 
 const CurrencyInput = ({
     numero, 
     label="",
-    moeda="R$", 
+    symbolStart="", 
+    symbolEnd="",
     fullWidth=false, 
     onChange,
     autoFocus=false,
     disabled=false,
     inputRef = undefined,
     color = "primary",
-    variant = "standard"
+    variant = "standard",
+    maxValue = 999999999999999.99,
+    onOverFlow = undefined,
+    helperText = "",
+    error = false,
 }:IPropsCurrencyInput) => {
     // valor em texto que sera exibido para o usuario
     const [textValue, setTextValue] = useState<string>( 
@@ -43,10 +53,23 @@ const CurrencyInput = ({
     const handleChangeValue = (event:any) => {
         // valida se é um número
         if(/^[\d]+(,\d{0,2})?$/.test(event.target.value)) {
+            // transforma texto em numero
+            const value = parseTextToNumber(event.target.value)
+
+            // dispara o evento onOverFlow quando ultrapassa o valor máximo
+            if (value > maxValue) {
+                if(typeof onOverFlow === "function") {
+                    onOverFlow( formatarTextoMoeda(event.target.value), value)
+                    return
+                }
+            }
+
+            // chama o evento onChange (que devolve um callback para o setstate do numero)
             onChange(()=>{
                 setTextValue(event.target.value)
-                return parseTextToNumber(event.target.value)
+                return value
             })
+            
         // tratamento para string vazia
         } else if(event.target.value === '') {
             onChange(()=>{
@@ -80,13 +103,20 @@ const CurrencyInput = ({
             disabled = {disabled}
             inputRef = {inputRef}
             InputProps = {{
-            startAdornment: (
-                <InputAdornment position="start">
-                    {/** mostra o simbolo da moeda no início do campo*/}
-                    {moeda}
-                </InputAdornment>
-            ),
+                startAdornment: (
+                    <InputAdornment position="start">
+                        {/** mostra o simbolo no início do campo*/}
+                        {symbolStart}
+                    </InputAdornment>
+                ),
+                endAdornment: (
+                    <InputAdornment position='end'>
+                        {symbolEnd}
+                    </InputAdornment>
+                )
             }}
+            helperText = {helperText}
+            error = {error}
         />
     )
 }
