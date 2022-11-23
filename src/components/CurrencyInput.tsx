@@ -1,4 +1,4 @@
-/** COMPONENTE PARA TRATAR VALOR DE MOEDA    */
+/** COMPONENTE PARA TRATAR VALOR EM DECIMAL */
 /** Autor: Ricardo Santos da Silva */
 
 /** passar um state numerico na props numero */
@@ -149,8 +149,6 @@ const parseTextToNumber = (textValue: string) => {
 
 // funcao que transforma o número em texto
 const parseNumberToText = (value: number) => {
-    console.log(value)
-    console.log(value.toString())
   return value.toString().replace(",", "").replace(".", ",");
 };
 

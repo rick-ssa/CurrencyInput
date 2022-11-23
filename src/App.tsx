@@ -26,7 +26,7 @@ function App() {
     setNumero(callBack)
   }
 
-  const maxValue = 100
+  const maxValue = 100000000000000
 
   return (
     <div className={'App'}>
