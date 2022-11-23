@@ -13,9 +13,9 @@ function App() {
     setHelperText(`valor máximo ${maxValue}`)
   },[])
 
-  const handleOverFlow = (moedaValue:string) => {
+  const handleOverFlow = (valores:{valorDecimal:string}) => {
     setError(true)
-    setHelperText(`${moedaValue} é maior que ${maxValue}`)
+    setHelperText(`${valores.valorDecimal} é maior que ${maxValue}`)
   }
 
   const handleOnChange = (callBack:any) => {
@@ -26,23 +26,23 @@ function App() {
     setNumero(callBack)
   }
 
-  const maxValue = 100000
+  const maxValue = 100
 
   return (
     <div className={'App'}>
       <CurrencyInput 
         variant='outlined'
         numero={numero} 
-        color="primary" 
-        autoFocus 
+        
+        color="primary"  
         label='valor' 
-        symbolStart='R$'
-        maxValue={maxValue}
         onChange={handleOnChange} 
         onOverFlow={handleOverFlow}
         error = {error}
         helperText = {helperText}
         symbolEnd='%'
+        autoFocus
+        maxValue={maxValue}
       />
 
     </div>
